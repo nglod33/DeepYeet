@@ -1,15 +1,9 @@
-import bs4 as bs
-import urllib.request
+from bs4 import BeautifulSoup
 import requests
 
-sauce= urllib.request.urlopen('https://www.ethicalconsumer.org/ethicalcampaigns/boycotts').read()
-soup=bs.BeautifulSoup(sauce,'lxml')
-print(soup.find_all('h3'))
-
-# for item in soup.find_all('div'):
-#     print(item.get('b'))
-
-# for item in soup.find_all('h3'):
-#     for item1 in soup.find_all('div'):
-#         print(item1)
-
+site = requests.get('https://www.ethicalconsumer.org/ethicalcampaigns/boycotts')
+soup = BeautifulSoup(site.text,'html.parser')
+results = soup.find_all('h3')
+results = soup.find_all('p')
+for counter, i in enumerate(results):
+    print(counter, i)
