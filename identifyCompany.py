@@ -2,31 +2,24 @@
 
 import sys, getopt, os, io
 
-def whatLogo(imgPath):
+def whatLogo(imgURI):
     """Detects logos in photos"""
     from google.cloud import vision
     client = vision.ImageAnnotatorClient()
-
-    file_name = os.path.join(os.path.dirname(__file__),
-    imgPath)
-
-
-    with io.open(file_name, 'rb') as image_file:
-        content = image_file.read()
-
-    image = vision.types.Image(content=content)
+    image = vision.types.Image()
+    image.source.image_uri = imgURI
 
     response = client.logo_detection(image=image)
     logos = response.logo_annotations
     if(len(logos) == 0):
-        print('No logos detected')
+        print("No logos detected")
+        return ""
     else:
-        for logo in logos:
-            print(logo.description)
-    return len(logos)
+        print(logos[0].description)
+        return logos[0].description
 
-def main(imgPath):
-    whatLogo(imgPath)
+def main(imgURI):
+    whatLogo(imgURI)
 
 if __name__ == "__main__":
     main(sys.argv[1])
